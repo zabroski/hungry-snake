@@ -1,112 +1,101 @@
 // let canMoveX = true;
 // let canMoveY = true;
-function moveSnake() {
-  const body = document.getElementsByTagName('body')[0];
-  body.addEventListener('keydown', (evt) => {
-    const snake = document.getElementById('snake');
-    const currentXPosition = snake.style.marginLeft.replace('px', '') || 0;
-    let newXPosition = currentXPosition;
-    const currentYPosition = snake.style.marginTop.replace('px', '') || 0;
-    let newYPosition = currentYPosition;
 
-    if (evt.code === 'ArrowRight') {
-      newXPosition = parseInt(currentXPosition) + 50;
-    } else if (evt.code === 'ArrowLeft') {
-      newXPosition = parseInt(currentXPosition) - 50;
-    } else if (evt.code === 'ArrowUp') {
-      newYPosition = parseInt(currentYPosition) - 50;
-    } else if (evt.code === 'ArrowDown') {
-      newYPosition = parseInt(currentYPosition) + 50;
-    }
+const body = document.getElementsByTagName('body')[0];
 
-    if (newXPosition === -50 || newXPosition === 400) {
-      newXPosition = true;
-    } else if (newYPosition === -50 || newYPosition === 400) {
-      newYPosition = true;
-    }
-    snake.style.marginTop = `${newYPosition}px`;
-    snake.style.marginLeft = `${newXPosition}px`;
-  });
+const grid = {
+  snake: {
+    x: 0,
+    y: 0,
+  },
+  foods: [{
+    id: 'food',
+    x: 7, // 350px
+    y: 7, // 350px
+  },
+  {
+    id: 'food2',
+    x: 2, // 50px
+    y: 2, // 50px
+  }],
+};
+let direction = null;
+
+function calculateItemPosition(newItemPosition) {
+  return newItemPosition / 50; //  chaque nouriture.;;
 }
-moveSnake();
 
+function moveSnake(direction) {
+  const snake = document.getElementById('snake');
 
-// second option for keyDown event
+  const currentXPosition = snake.style.marginLeft.replace('px', '') || 0;
+  const currentYPosition = snake.style.marginTop.replace('px', '') || 0;
 
-// const snake = {x: 0, y: 0}
+  let newXPosition = currentXPosition;
+  let newYPosition = currentYPosition;
 
-// const canMoveTo = function(x, y) {
-//     if(!coordinateGrid(x ,y)){
-//         return false
-//     }
-// }
+  if (direction === 'ArrowRight') {
+    newXPosition = parseInt(currentXPosition) + 50;
+  } else if (direction === 'ArrowLeft') {
+    newXPosition = parseInt(currentXPosition) - 50;
+  } else if (direction === 'ArrowUp') {
+    newYPosition = parseInt(currentYPosition) - 50;
+  } else if (direction === 'ArrowDown') {
+    newYPosition = parseInt(currentYPosition) + 50;
+  }
 
-// const coordinateGrid = function(x, y) {
-//     if(x < 0 || y < 0 || x > 8 || y > 8) {
-//         return false
-//     }else {
-//         return true
-//     }
-// };
+  if (newXPosition >= 0 && newXPosition <= 350) {
+    snake.style.marginLeft = `${newXPosition}px`;
+    grid.snake.x = calculateItemPosition(newXPosition);
+  }
 
+  if (newYPosition >= 0 && newYPosition <= 350) {
+    snake.style.marginTop = `${newYPosition}px`;
+    grid.snake.y = calculateItemPosition(newYPosition);
+  }
+}
 
-// function moveCharacterTo(x, y) {
-//     const snake = document.querySelector('.snake');
-//     snake.style.left = (x * 50).toString() + 'px';
-//     snake.style.top = (y * 50).toString() + 'px'
+function getFoodAt(x, y) {
+  for (let i = 0; i < grid.foods.length; i++) {
+    if (x === grid.foods[i].x && y === grid.foods[i].y) {
+      return grid.foods[i];
+    }
+  }
 
-// };
+  return null;
+}
 
-// function moveLeft() {
-//     if(canMoveTo(snake.x - 1, snake.y)){
-//         snake.x -= 1
-//         moveCharacterTo(snake.x , snake.y)
-//     }
-// };
+function eatFoods() {
+  const food = getFoodAt(grid.snake.x, grid.snake.y);
+  if (food != null) {
+    document.getElementById(food.id).remove();
+  }
+}
 
-// function moveUp() {
-//     if(canMoveTo(snake.x, snake.y - 1)) {
-//         snake.y = snake.y - 1
-//         moveCharacterTo(snake.x, snake.y)
-//     }
-// };
+body.addEventListener('keydown', (evt) => {
+  direction = evt.code;
+});
 
-// function moveRight() {
-//     if(canMoveTo(snake.x + 1, snake.y)) {
-//         snake.x += 1
-//         moveCharacterTo(snake.x, snake.y)
-//     }
-// };
+function initFood() {
+  // forloop to display div on the virtual html grid and in the var grid
 
-// function moveDown() {
-//     if(canMoveTo(snake.x, snake.y + 1)) {
-//         snake.y += 1
-//         moveCharacterTo(snake.x, snake.y)
-//     }
-// }
+  const food = document.querySelector('body');
+  const newDiv = document.createElement('div');
+  //   const textNode = document.createTextNode('randomFood');
+  food.appendChild(newDiv);
+  newDiv.classList.add('food1');
+//   newDiv.appendChild(textNode);
+}
 
+function startGame() {
+  initFood();
+  setInterval(() => { // when press direction going to setInterval witout res
+    moveSnake(direction);
+    eatFoods();
+  }, 400);
+}
 
-// document.body.addEventListener('keydown', (evt)=>{
-//     const keyCode = evt.keyCode
-//     const arrowKeys = [37,38,39,40]
-//     if(arrowKeys.includes(keyCode)) {
-//         evt.preventDefault
-//     }
-//     switch(keyCode) {
-//         case 37:
-//         console.log('okay')
-//             moveLeft()
-//             break;
-//         case 38:
-//             moveUp()
-//             break;
-//         case 39:
-//             moveRight()
-//             break;
-//         case 40:
-//         moveDown()
-//     }
-// }
+startGame();
 
 
 // let foods = ['food1', 'food2', 'food3']
@@ -132,34 +121,6 @@ moveSnake();
 //     event.target.style.marginLeft = `${newXPosition}px`;
 //     event.target.style.marginTop = `${newYPosition}px`;
 //   });
-// };
-
-// // document.body.addEventListener('keydown', function(evt){
-// //     const keyCode = evt.keyCode;
-// //     const arrowKeys = [37,38,39,40];
-// //    if (arrowKeys.includes(keyCode)) {
-// //        evt.preventDefault
-// //    }else if(arrowKeys === 37){
-// //        return;
-// //    }else if(arrowKeys === 38) {
-// //        return;
-// //    }else if(arrowKeys === 39) {
-// //        return;
-// //    }else if(arrowKeys === 40){
-// //        return;
-// //    }
-
-// // })
-
-
-// const createSnake = function () {
-//   const snake = document.querySelector('body');
-//   const newDiv = document.createElement('div');
-//   // console.log(snake)
-//   const textNode = document.createTextNode('snake');
-//   snake.appendChild(newDiv);
-//   newDiv.classList.add('snake');
-//   newDiv.appendChild(textNode);
 // };
 
 
@@ -199,13 +160,3 @@ moveSnake();
 // for(let i = 0; i < 2; i++){
 //     createMongooses()
 // }
-
-
-// const run = function () {
-//   moveSnake();
-//   createFoods();
-//   createSnake();
-//   createMongooses()
-//   randomFoodFunction()
-// };
-// run();
