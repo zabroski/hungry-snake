@@ -133,6 +133,8 @@ function isFree(x, y) {
   return true;
 }
 
+
+
 function isEnemyFree(x, y) {
   if (x === grid.x && y === grid.snake.y) { // enemy part...
     return false;
@@ -148,6 +150,18 @@ function isEnemyFree(x, y) {
 body.addEventListener('keydown', (evt) => {
   direction = evt.code;
 });
+
+function isEnemyIn(x, y) {
+  if (x === grid.x && y === grid.snake.y) {
+    return false;
+  }
+  for (let i = 0; i < grid.enemy.length; i++) {
+    if (x === grid.enemy[i].x && y === grid.enemy[i].y) {
+      return false;
+    }
+  }
+  return true;
+}
 
 function renderEnnemy() {
   // for loop to dispaly div on the virtual html grid and in the let grid
@@ -211,6 +225,7 @@ function renderFood() {
 function startGame() {
   renderFood();
   renderEnnemy();
+  /*isEnemyIn();*/
   const interval = setInterval(() => { // when press direction going to setInterval witout res
     moveSnake(direction);
     eatFoods();
