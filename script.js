@@ -11,13 +11,13 @@ const grid = {
   foods: [],
   enemy: [],
 };
-let direction = null;
+let keyDownCode = null;
 
-function calculateItemPosition(newItemPosition) {
-  return newItemPosition / 50; //  chaque nouriture.;;
+function calculateItemPosition(position) {
+  return position / 50;
 }
 
-function moveSnake(direction) {
+function moveSnake(moveSnakeInDirection) {
   const snake = document.getElementById('snake');
 
   const currentXPosition = snake.style.marginLeft.replace('px', '') || 0;
@@ -26,33 +26,27 @@ function moveSnake(direction) {
   let newXPosition = currentXPosition;
   let newYPosition = currentYPosition;
 
-  if (direction === 'ArrowRight') {
-    newXPosition = parseInt(currentXPosition) + 50; // returning var current X position en number!
+  if (moveSnakeInDirection === 'ArrowRight') {
+    newXPosition = parseInt(currentXPosition) + 50; 
     snake.style.backgroundImage = 'url(img/snake_right.png)';
-  } else if (direction === 'ArrowLeft') {
+  } else if (moveSnakeInDirection === 'ArrowLeft') {
     newXPosition = parseInt(currentXPosition) - 50;
     snake.style.backgroundImage = 'url(img/snake_left.png)';
-  } else if (direction === 'ArrowUp') {
-    newYPosition = parseInt(currentYPosition) - 50; // returning variable current Y position en number!
-  } else if (direction === 'ArrowDown') {
+  } else if (moveSnakeInDirection === 'ArrowUp') {
+    newYPosition = parseInt(currentYPosition) - 50;
+  } else if (moveSnakeInDirection === 'ArrowDown') {
     newYPosition = parseInt(currentYPosition) + 50;
   }
 
-  // if (newXPosition >= 0 && newXPosition <= 350) {
-  snake.style.marginLeft = `${newXPosition}px`; // snake box will stay in the grid cuz original g.. is 400px
+  snake.style.marginLeft = `${newXPosition}px`;
   grid.snake.x = calculateItemPosition(newXPosition);
-  // }
-
-  // if (newYPosition >= 0 && newYPosition <= 350) {
   snake.style.marginTop = `${newYPosition}px`;
-  grid.snake.y = calculateItemPosition(newYPosition); // ensuite pour le Y aussi!
-  // }
+  grid.snake.y = calculateItemPosition(newYPosition);
 }
-
 
 function getFoodAt(x, y) {
   for (let i = 0; i < grid.foods.length; i++) {
-    if (grid.foods[i] && x === grid.foods[i].x && y === grid.foods[i].y) { // now i know where is foods in grid
+    if (grid.foods[i] && x === grid.foods[i].x && y === grid.foods[i].y) {
       return {
         food: grid.foods[i],
         positionInArray: i,
@@ -65,18 +59,16 @@ function getFoodAt(x, y) {
 
 
 function eatFoods() {
-  // x is 1
-  // y is 1
-  const foodAndPositionOfFood = getFoodAt(grid.snake.x, grid.snake.y); // snake positions
+  const foodAndPositionOfFood = getFoodAt(grid.snake.x, grid.snake.y);
   if (foodAndPositionOfFood && foodAndPositionOfFood.food != null) {
-    document.getElementById(foodAndPositionOfFood.food.id).remove(); // and use ID of food to remove it from grid
+    document.getElementById(foodAndPositionOfFood.food.id).remove();
     const position = foodAndPositionOfFood.positionInArray;
     grid.foods.splice(position, 1);
   }
 }
 
 
-function getEnemyAt(x, y) { // / enemy part
+function getEnemyAt(x, y) {
   for (let i = 0; i < grid.enemy.length; i++) {
     if (x === grid.enemy[i].x && y === grid.enemy[i].y) {
       return grid.enemy[i];
@@ -85,20 +77,19 @@ function getEnemyAt(x, y) { // / enemy part
   return null;
 }
 
+
 function touchDied() {
   const enemy = getEnemyAt(grid.snake.x, grid.snake.y);
   if (enemy != null) {
     document.getElementById('snake').remove();
     alert('You have been touched by an ennemy you lose!! POUAAAA!!!!');
     return true;
-    // console.log(' player touched the enemy');
   }
 
   return false;
 }
 
 function isOutOfgrid() {
-//   console.log(grid.snake.x);
   if (grid.snake.x >= 8 || grid.snake.x < 0 || grid.snake.y >= 8 || grid.snake.y < 0) { // tranform px to number => 400px == 8
     document.getElementById('snake').remove();
     alert('You are out of bound, you lose!! POUAAAA!!!!');
@@ -120,38 +111,24 @@ function checkWinner() {
 
 
 function isFree(x, y) {
-  if (x === grid.snake.x && y === grid.snake.y) { // need to
+  if (x === 0 && y === 0) {
+    return false;
+  }
+  if (x === grid.snake.x && y === grid.snake.y) {
     return false;
   }
 
   for (let i = 0; i < grid.foods.length; i++) {
     if (x === grid.foods[i].x && y === grid.foods[i].y) {
-      return false;
+      return false; 
     }
   }
 
   return true;
 }
-
 
 
 function isEnemyFree(x, y) {
-  if (x === grid.x && y === grid.snake.y) { // enemy part...
-    return false;
-  }
-  for (let i = 0; i < grid.enemy.length; i++) {
-    if (x === grid.enemy[i].x && y === grid.enemy[i].y) {
-      return false;
-    }
-  }
-  return true;
-}
-
-body.addEventListener('keydown', (evt) => {
-  direction = evt.code;
-});
-
-function isEnemyIn(x, y) {
   if (x === grid.x && y === grid.snake.y) {
     return false;
   }
@@ -163,49 +140,54 @@ function isEnemyIn(x, y) {
   return true;
 }
 
-function renderEnnemy() {
-  // for loop to dispaly div on the virtual html grid and in the let grid
-  const howManyEnemy = Math.floor(Math.random() * 4);
+body.addEventListener('keydown', (evt) => {
+  keyDownCode = evt.code;
+});
 
-  for (let i = 0; i < 3; i++) {
+function renderEnemy() {
+  const howManyEnemies = Math.floor(Math.random() * 5);
+
+  for (let i = 0; i < howManyEnemies; i++) {
     const htmlGrid = document.getElementsByClassName('grid')[0];
     const enemy = document.createElement('div');
     htmlGrid.appendChild(enemy);
     enemy.classList.add('enemy');
-    const pxRandomXEnemyPosition = Math.floor(Math.random() * 4);
-    const pxRandomYEnemyPosition = Math.floor(Math.random() * 4);
+    const pxRandomXEnemyPosition = Math.floor(Math.random() * 7);
+    const pxRandomYEnemyPosition = Math.floor(Math.random() * 7);
     const pxPositionX = (50 * pxRandomXEnemyPosition);
     const pxPositionY = (50 * pxRandomYEnemyPosition);
     enemy.style.marginLeft = `${pxPositionX}px`;
     enemy.style.marginTop = `${pxPositionY}px`;
 
-    grid.enemy.push({
-      x: calculateItemPosition(pxPositionX),
-      y: calculateItemPosition(pxPositionY),
-      // id,
-    });
+    if (!isFree(pxRandomXEnemyPosition, pxRandomYEnemyPosition)) {
+      i--;
+    } else {
+      grid.enemy.push({
+        x: calculateItemPosition(pxPositionX),
+        y: calculateItemPosition(pxPositionY),
+      });
+    }
+
   }
 }
 
 
 function renderFood() {
-  //   // forloop to display div on the virtual html grid and in the let grid
-
-  const howManyFood = Math.floor(Math.random() * 6) + 1;
-  for (let i = 0; i < howManyFood; i++) { // loop in my random foods
-    const id = `food${i}`;
+  const howManyFood = Math.floor(Math.random() * 7);
+  for (let i = 0; i < howManyFood; i++) { 
+    const id = `food${i}`; 
     const food = document.createElement('div');
 
-    const pxRandomXFoodPosition = Math.floor(Math.random() * 7); // random position of X
-    const pxRandomYFoodPosition = Math.floor(Math.random() * 7); // random position of Y
+    const pxRandomXFoodPosition = Math.floor(Math.random() * 7);
+    const pxRandomYFoodPosition = Math.floor(Math.random() * 7);
 
     if (!isFree(pxRandomXFoodPosition, pxRandomYFoodPosition)) {
-      i--; // keeps the for loop if space is not free
+      i--; 
     } else {
-      const pxPositionX = (50 * pxRandomXFoodPosition); // have my foods
-      const pxPositionY = (50 * pxRandomYFoodPosition);//
+      const pxPositionX = (50 * pxRandomXFoodPosition); 
+      const pxPositionY = (50 * pxRandomYFoodPosition);
       food.id = id;
-      food.style.marginLeft = `${pxPositionX}px`;
+      food.style.marginLeft = `${pxPositionX}px`; 
       food.style.marginTop = `${pxPositionY}px`;
       food.classList.add('food');
 
@@ -213,7 +195,7 @@ function renderFood() {
       htmlGrid.appendChild(food);
 
       grid.foods.push({
-        x: calculateItemPosition(pxPositionX),
+        x: calculateItemPosition(pxPositionX),  
         y: calculateItemPosition(pxPositionY),
         id: food.id,
       });
@@ -221,13 +203,11 @@ function renderFood() {
   }
 }
 
-
 function startGame() {
   renderFood();
-  renderEnnemy();
-  /*isEnemyIn();*/
-  const interval = setInterval(() => { // when press direction going to setInterval witout res
-    moveSnake(direction);
+  renderEnemy();
+  const interval = setInterval(() => { 
+    moveSnake(keyDownCode);
     eatFoods();
     if (checkWinner()) {
       clearInterval(interval);
