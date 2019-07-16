@@ -1,0 +1,127 @@
+ 
+ .grid {
+     width: 400px;
+     height: 400px;
+     background-color: gray;
+     overflow: hidden;
+     position: relative;
+     background-image: url(img/background.jpg);
+     margin-top: 90px;
+     border: 1px solid black;
+     top: 40px;
+     
+
+   
+ }
+ body{
+      display: flex;
+     background-image: url(img/body_background.jpg)
+ }
+ .home{
+     background-color: rgb(0, 255, 157);
+     width: 400px;
+     height: 400px;
+     margin-top: 90px;
+     font-size: 15px;
+     border: 1px solid black;
+     top: 40px;
+ }
+
+ .food {
+     width: 50px;
+     height: 50px;
+     position: absolute;
+     background-image: url(https://pics.clipartpng.com/midle/Apple_PNG_Clip_Art-1467.png);
+     background-repeat: no-repeat;
+     background-size: 50px 50px;
+ }
+
+ 
+ .enemy {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background-image: url('img/mangoose.png');
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+}
+
+
+#snake {
+    width: 50px;
+    height: 50px;
+    z-index: 100;
+    position: absolute;
+    transition-duration: 0.5s;
+    border-radius: 50%;
+    background-image: url('img/snake_right.png');
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+ }
+
+
+ nav{
+     text-align: center;
+     background: greenyellow;
+     position: fixed;
+     top: 0;
+     width: 100%;
+ } 
+
+
+
+ a {
+    background: pink;
+    font-family: serif;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase; 
+    padding: 20px;
+    display: inline-block;
+
+    
+ }
+ a {
+     border: 1px solid black;
+ }
+ 
+ a:hover {
+     color:rgb(215, 255, 105);
+ }
+
+ h1 {
+    /* background: black; */
+    text-align: center;
+    font-size: 35px;
+    color: blue;
+    height: 40px;
+    width: 400px;
+    position: relative;
+    top: 30px;
+    animation: move 4s infinite;
+    display: inline-block;
+ }
+
+ 
+
+ h2 {
+     text-align: center;
+     font-size: 30px;
+     position: relative;
+ }
+
+ p {
+     text-align: center;
+     font-size: 20px;
+ }
+
+ @keyframes move {
+     from{left: 0px; color:red;}
+     50%{
+         color: #8C807D
+     }
+     to {left: 800px; color: rgb(255, 215, 0);}
+ }
+
+
+
