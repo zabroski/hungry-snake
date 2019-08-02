@@ -53,10 +53,14 @@
     z-index: 100;
     position: absolute;
     transition-duration: 0.5s;
-    border-radius: 50%;
+    /* border-radius: 50%; */
     background-image: url('img/snake_right.png');
     background-repeat: no-repeat;
     background-size: 50px 50px;
+ }
+ .timer{
+     margin: 100px;
+     color: red
  }
 
 

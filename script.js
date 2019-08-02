@@ -75,7 +75,16 @@ function getEnemyAt(x, y) {
     }
   }
   return null;
-}
+} 
+
+// function timer() {
+//   let number = 60;
+// setInterval(() =>{
+//   number - =1
+//   document.querySelector('.timer').innerHTML = timer;
+// },1000)
+
+// }
 
 
 function touchDied() {
@@ -108,7 +117,6 @@ function checkWinner() {
 
   return false;
 }
-
 
 function isFree(x, y) {
   if (x === 0 && y === 0) {
@@ -206,6 +214,7 @@ function renderFood() {
 function startGame() {
   renderFood();
   renderEnemy();
+  // timer();
   const interval = setInterval(() => { 
     moveSnake(keyDownCode);
     eatFoods();
