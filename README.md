@@ -1,12 +1,10 @@
 
 
-#title
-
+## title
     hungry-snake
-    The player will represent the snake in the grid and the snake need to eat some food by avoiding enemies.
-    The Player will use the keydown press left, right and bottom, top keys to control the snake.
+   
 
-# description and user story 
+## description and user story 
 
     To win the game the player need to move the snake around with the left, right and top ,button to avoid the enemies in the 400px * 400px grid. If the snake eat all the apples the player will win the game but if the player touch the enemies the snake will died. the player also need to avoid touching the X and Y axis of the grid unless the player will died.
 
